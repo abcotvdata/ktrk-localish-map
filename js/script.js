@@ -20,6 +20,8 @@ $(document).ready(function(){ // begin document.ready block
 		// var pane = map.createPane('fixedbg', document.getElementById('map'));
 		var pane = map.createPane('fixed', document.getElementById('map'));
 		var pane = map.createPane('bgfixed', document.getElementById('map'));
+		map.createPane('labels');
+		map.getPane('labels').style.zIndex = 650;
 
 		var icon = L.icon({
 			iconSize: [30, 40],
@@ -50,12 +52,13 @@ $(document).ready(function(){ // begin document.ready block
 
 
 	    //tile layer
-		L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-			attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
-			subdomains: 'abcd',
-			opacity: 0.25,
-	    	pane: 'overlayPane',
-			ext: 'png'
+		var positron = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}.png', {
+	        attribution: '&copyOpenStreetMap, &copyCartoDB'
+		}).addTo(map);
+
+		var positronLabels = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}.png', {
+		    attribution: '&copyOpenStreetMap, &copyCartoDB',
+		    pane: 'labels'
 		}).addTo(map);
 
 	// 	var positron = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}.png', {
@@ -75,7 +78,7 @@ $(document).ready(function(){ // begin document.ready block
 	    		"fillColor": "#407f7b",
 			    "color": "white",
 			    "weight": 2,
-			    "fillOpacity": 0.65
+			    "fillOpacity": 0.5
 			};
 
 	    	L.geoJson(polygondata, {

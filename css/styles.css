@@ -113,6 +113,10 @@ body {
   transform: translate(-50%, 0%);
 }
 
+.leaflet-marker-pane {
+  z-index: 700 !important;
+}
+
 /*.search-cancel {
   right: 204px !important;
 }
