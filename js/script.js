@@ -16,7 +16,7 @@ $(document).ready(function(){ // begin document.ready block
 	 //    bounds = L.latLngBounds(southWest, northEast);
 
 
-		var map = L.map('map', {zoom: 8, center: new L.latLng([30.4,-95.4])}).setMaxBounds(bounds);
+		var map = L.map('map', {zoom: 8, center: new L.latLng([30.4,-95.4])});
 		// var pane = map.createPane('fixedbg', document.getElementById('map'));
 		var pane = map.createPane('fixed', document.getElementById('map'));
 		var pane = map.createPane('bgfixed', document.getElementById('map'));
@@ -418,15 +418,15 @@ $(document).ready(function(){ // begin document.ready block
 	else {
 	   // alert('Less than 600');
 
-		var southWest = L.latLng(30, -112),
-	    northEast = L.latLng(39, -130),
-	    bounds = L.latLngBounds(southWest, northEast);
 
 
-		var map = L.map('map', {minZoom: 8}).setView([37,-119.76], 8).setMaxBounds(bounds);
+
+		var map = L.map('map', {zoom: 8, center: new L.latLng([30.4,-95.4])});
 		// var pane = map.createPane('fixedbg', document.getElementById('map'));
 		var pane = map.createPane('fixed', document.getElementById('map'));
 		var pane = map.createPane('bgfixed', document.getElementById('map'));
+		map.createPane('labels');
+		map.getPane('labels').style.zIndex = 650;
 
 		var icon = L.icon({
 			iconSize: [30, 40],
@@ -457,13 +457,15 @@ $(document).ready(function(){ // begin document.ready block
 
 
 	    //tile layer
-		L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/toner-lite/{z}/{x}/{y}{r}.{ext}', {
-			attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-			subdomains: 'abcd',
-			opacity: 0.25,
-	    	pane: 'overlayPane',
-			ext: 'png'
+		var positron = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}.png', {
+	        attribution: '&copyOpenStreetMap, &copyCartoDB'
 		}).addTo(map);
+
+		var positronLabels = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}.png', {
+		    attribution: '&copyOpenStreetMap, &copyCartoDB',
+		    pane: 'labels'
+		}).addTo(map);
+
 
 
 		map.createPane("polygonsPane");
@@ -471,14 +473,15 @@ $(document).ready(function(){ // begin document.ready block
 
 
 
+		
 		// county layer
-		$.getJSON("fresno-counties.geojson",function(polygondata){
+		$.getJSON("ktrk-counties.geojson",function(polygondata){
 
 	    	var myStyle = {
 	    		"fillColor": "#407f7b",
 			    "color": "white",
 			    "weight": 2,
-			    "fillOpacity": 0.65
+			    "fillOpacity": 0.5
 			};
 
 	    	L.geoJson(polygondata, {
@@ -493,7 +496,7 @@ $(document).ready(function(){ // begin document.ready block
 
 
 		// taco locations layer
-		$.getJSON("dd_data_locations.geojson",function(data){
+		$.getJSON("ktrk_localish_locations.geojson",function(data){
 
 			var items = data;
 
@@ -504,7 +507,7 @@ $(document).ready(function(){ // begin document.ready block
 
 				var items_length = items.length
 
-				console.log(items)
+				// console.log(items)
 
 		        for (let i = 0; i < items.length; i++) {
 		        	console.log(items[i].properties)
